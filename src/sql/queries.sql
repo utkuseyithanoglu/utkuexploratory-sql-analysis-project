@@ -101,4 +101,38 @@ FROM observations
 GROUP BY (observations.count)
 ORDER BY  observations.count DESC
 LIMIT 1;
---
+--Show the region name (regions.name) for each observation.
+--Join observations with regions using region_id.
+SELECT observations.*,regions.name
+FROM observations
+JOIN regions
+ON observations.id = regions.id
+LIMIT 3;
+--Show the scientific name of each recorded species (species.scientific_name).
+--Join observations with species using species_id.
+SELECT observations.*,species.scientific_name
+FROM observations
+LEFT JOIN species
+ON observations.species_id = species.id
+LIMIT 3 ;
+--Which is the most observed species in each region?
+--Group by region and species, and order by count.
+SELECT regions.country,species.common_name,COUNT(observations.id) AS "counts"
+FROM observations
+JOIN regions
+ON observations.region_id = regions.id
+JOIN species
+ON observations.species_id = species.id 
+GROUP BY (species.common_name)
+ORDER BY counts DESC
+LIMIT 1;
+--Insert a new fictitious observation into the observations table.
+--Be sure to include all fields required by the schema.
+INSERT INTO observations(observer,observation_date,latitude,longitude,count)
+VALUES ('utku','2025-11-18',41.0,29.4,1);
+
+
+SELECT *
+FROM observations
+WHERE observer = 'utku';
+
